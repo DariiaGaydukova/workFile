@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class Basket {
+public class Basket implements Serializable {
     private String[] products;
     private int[] prices;
     private long[] productBasket;
@@ -75,6 +75,21 @@ public class Basket {
             Basket basket = new Basket(products, prices);
             return basket;
         }
+    }
+
+    public void saveBin(File textFile) throws Exception {
+        try
+                (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(textFile))) {
+            out.writeObject(this);
+        }
+    }
+
+    public static Basket loadFromBinFile(File textFile) throws Exception {
+        try
+                (ObjectInputStream in = new ObjectInputStream(new FileInputStream(textFile))) {
+            Basket basket = (Basket) in.readObject();
+            return basket;
+        }
 
     }
 
@@ -85,7 +100,6 @@ public class Basket {
     public long[] getProductBasket() {
         return productBasket;
     }
-
 
     public String[] getProducts() {
         return products;
