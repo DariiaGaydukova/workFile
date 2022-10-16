@@ -1,5 +1,7 @@
 import java.io.File;
 import com.opencsv.CSVWriter;
+
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +18,8 @@ public class ClientLog {
     }
 
     public void exportAsCSV(File txtFile) throws IOException {
-        try (CSVWriter csvWriter = new CSVWriter(new FileWriter(file))) {
-            csvWriter.writeAll(productList);
+        try (CSVWriter csvWriter = new CSVWriter(new FileWriter(txtFile))) {
+            csvWriter.writeAll((List<String[]>) productList);
         }
     }
 
