@@ -5,7 +5,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        File file = new File("basket.txt");
+        File file = new File("basket.json");
         Basket basket = null;
 
         try {

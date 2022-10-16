@@ -48,7 +48,6 @@ public class Basket {
 
 
     static Basket loadFromTxtFile(File textFile) throws Exception {
-        if (textFile.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(textFile));) {
 
                 String[] products = reader.readLine().strip().split(" ");
@@ -69,14 +68,7 @@ public class Basket {
                 return basket;
             }
 
-        } else {
-            String[] products = {"apple", "milk", "rice"};
-            int[] prices = {70, 100, 120};
-            Basket basket = new Basket(products, prices);
-            return basket;
         }
-
-    }
 
     public int[] getPrices() {
         return prices;
