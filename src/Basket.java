@@ -64,9 +64,10 @@ public class Basket {
         return gson.fromJson(reader, Basket.class);
     }
 
-    static Basket loadFromTxtFile(File textFile) throws Exception {
-        if (textFile.exists()) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(textFile));) {
+
+    static Basket loadFromTxtFile(File fileName) throws Exception {
+        if (fileName.exists()) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName));) {
 
             String[] products = reader.readLine().strip().split(" ");
             String[] pricesStr = reader.readLine().strip().split(" ");

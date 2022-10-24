@@ -7,8 +7,8 @@ public class ReaderShop {
     String fileName;
     String format;
 
-    public void readConfig(Node config) {
 
+    public ReaderShop(Node config) {
 
         NodeList nodeList = config.getChildNodes();
 
