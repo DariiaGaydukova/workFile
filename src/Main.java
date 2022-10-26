@@ -6,7 +6,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -19,29 +18,35 @@ public class Main {
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = (Document) builder.parse(new File("shop.xml"));
 
-        Node config = doc.getDocumentElement();
+        NodeList loadList = doc.getElementsByTagName("load");
+        NodeList saveList = doc.getElementsByTagName("save");
+        NodeList logList = doc.getElementsByTagName("log");
 
-        ReaderShop load = new ReaderShop(doc.getElementsByTagName("load").item(0));
-        ReaderShop save = new ReaderShop(doc.getElementsByTagName("save").item(0));
-        ReaderShop log = new ReaderShop(doc.getElementsByTagName("log").item(0));
+        Node load = loadList.item(0);
+        Node save = saveList.item(0);
+        Node log = logList.item(0);
+
+        Element loadElement = (Element) load;
+        Element saveElement = (Element) save;
+        Element logElement = (Element) log;
 
 
         Scanner scanner = new Scanner(System.in);
         Basket basket = null;
 
 
-        if (load.equals("true")) {
-            if (load.format.equals("txt")) {
+        if (loadElement.getElementsByTagName("enabled").item(0).getTextContent().equals("true")) {
+            if (loadElement.getElementsByTagName("format").item(0).getTextContent().equals("text")) {
                 try {
-                    File textFile = new File("basket.txt");
+                    File textFile = new File(loadElement.getElementsByTagName("fileName").item(0).getTextContent());
                     basket = Basket.loadFromTxtFile(textFile);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
-            if (load.format.equals("json")) {
+            if (loadElement.getElementsByTagName("format").item(0).getTextContent().equals("json")) {
                 try {
-                    File textFile = new File("basket.json");
+                    File textFile = new File((loadElement.getElementsByTagName("fileName").item(0).getTextContent()));
                     basket = Basket.loadJson(textFile);
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
@@ -68,6 +73,14 @@ public class Main {
             String input = scanner.nextLine();
 
             if (input.equals("end")) {
+                if (logElement.getElementsByTagName("enabled").item(0).getTextContent().equals("true")) {
+                    try {
+                        clientLog.exportAsCSV(new File("client.csv"));
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
 
                 basket.printCart();
                 break;
@@ -81,9 +94,9 @@ public class Main {
                 clientLog.log(productNumber, productCount);
 
 
-                if (save.format.equals("json")) {
+                if ((saveElement.getElementsByTagName("format").item(0).getTextContent().equals("json"))) {
                     try {
-                        basket.saveJson(new File("basket.json"));
+                        basket.saveJson(new File(saveElement.getElementsByTagName("fileName").item(0).getTextContent()));
 
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
@@ -92,7 +105,7 @@ public class Main {
                 } else {
                     try {
 
-                        basket.saveTxt(new File("basket.txt"));
+                        basket.saveTxt(new File(saveElement.getElementsByTagName("fileName").item(0).getTextContent()));
 
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
@@ -100,14 +113,6 @@ public class Main {
 
                 }
 
-            }
-        }
-        if (log.enabled.equals("true")) {
-            try {
-                clientLog.exportAsCSV(new File("client.csv"));
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
             }
         }
     }
